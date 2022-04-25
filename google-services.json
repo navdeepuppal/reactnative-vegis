@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "23240514992",
+    "project_id": "reactvegis",
+    "storage_bucket": "reactvegis.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:23240514992:android:f26d4f7dd5e83db7ce4a75",
+        "android_client_info": {
+          "package_name": "com.reactvegis.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "23240514992-08s7eqlrivlen96ni9aane49vrta3bah.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDs70JKkH-lZO6vmheJCDSF2Eun9EX8-AA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "23240514992-08s7eqlrivlen96ni9aane49vrta3bah.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
