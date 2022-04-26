@@ -60,15 +60,15 @@ appButtonContainer: {
   },
 
   appButtonContainer1: {
-    backgroundColor: "#009688",
-    
+    backgroundColor: "green",
+   
     borderRadius: 0,
     paddingVertical: 10,
     paddingHorizontal: 12,
     position: "absolute",
     bottom: 0,
     width: 375,
-    height: 40,
+    height: 50,
     justifyContent: "center",
   }
 

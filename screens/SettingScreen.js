@@ -83,15 +83,13 @@ const styles = StyleSheet.create({
       
     },
     roundButton1: {
-        fontSize: 10,
-    fontSize: 90,
-      width: 50,
-      height: 50,
+      width: 40,
+      height: 40,
       justifyContent: 'center',
       alignItems: 'center',
       padding: 1,
-      borderRadius: 100,
-      backgroundColor: 'orange',
+      borderRadius: 0,
+      backgroundColor: 'white',
     },
     appButtonContainer: {
         backgroundColor: "#009688",
