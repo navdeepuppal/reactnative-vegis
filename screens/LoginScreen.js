@@ -10,7 +10,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 
 
-const Sqllite = () => {
+const Register = () => {
   const [text, onChangeText] = React.useState("");
   const [number, onChangeNumber] = React.useState(null);
   
@@ -122,4 +122,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Sqllite;
+export default Register;
