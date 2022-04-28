@@ -1,4 +1,5 @@
 import React from "react";
+import { useState, useEffect } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { createAppContainer } from "react-navigation";
 import { createMaterialBottomTabNavigator } from "react-navigation-material-bottom-tabs";
@@ -21,6 +22,34 @@ import ProfileSqliteScreen from "./screens/ProfileSqliteScreen";
 import InventorySqliteScreen from "./screens/InventorySqliteScreen";
 import MyStack from "./MyStack";
 //import FoodList from "./screens/FoodListScreen";
+
+import * as SQLite from "expo-sqlite";
+
+import Constants from "expo-constants";
+
+
+
+function openDatabase() {
+  if (Platform.OS === "web") {
+    return {
+      transaction: () => {
+        return {
+          executeSql: () => {},
+        };
+      },
+    };
+  }
+
+  const db = SQLite.openDatabase("db.db");
+  return db;
+}
+
+const db = openDatabase();
+
+
+
+
+
 
 const TabNavigator = createMaterialBottomTabNavigator(
   {
@@ -177,7 +206,32 @@ const TabNavigator = createMaterialBottomTabNavigator(
 
 const Navigator = createAppContainer(TabNavigator);
 
-export default function App() {
+
+
+
+
+
+export default function User() {
+  const [text, setText] = useState(null);
+  const [forceUpdate, forceUpdateId] = useForceUpdate();
+
+  useEffect(() => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        "create table if not exists fruits (name text primary key not null, cutprice integer, price integer, units text, comment text,  image text);"
+        
+      );
+      tx.executeSql(
+        "create table if not exists vegetables (name text primary key not null, cutprice integer, price integer, units text, comment text, image text);"
+        
+      );
+      console.log('Both table Created');
+    });
+  }, []);
+
+ 
+
+
   return (
     <Navigator>
       <HomeScreen />
@@ -187,3 +241,11 @@ export default function App() {
               <MyStack />
               );*/
 }
+
+function useForceUpdate() {
+  const [value, setValue] = useState(0);
+  return [() => setValue(value + 1), value];
+}
+
+
+

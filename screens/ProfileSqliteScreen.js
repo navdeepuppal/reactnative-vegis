@@ -43,9 +43,7 @@ function Items({ done: doneHeading, onPressItem }) {
 
   const heading = doneHeading ? "Completed" : "";
 
-  if (items === null || items.length === 0) {
-    return null;
-  }
+
 
   return (
     <View style={styles.sectionContainer}>

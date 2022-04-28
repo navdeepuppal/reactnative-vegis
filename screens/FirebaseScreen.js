@@ -17,11 +17,11 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-const Ref = ref(db, "Hello/name");
+const Ref = ref(db, "Orders/name");
 var p;
 class Firebase extends React.Component {
   writeUserData(name) {
-    set(ref(db, "Hello/"), {
+    set(ref(db, "Orders/"), {
       name: name,
     });
     this.setState({
@@ -37,7 +37,7 @@ class Firebase extends React.Component {
       <SafeAreaView>
         <Text> Firebase ! {p}</Text>
         <TouchableOpacity
-          onPress={() => this.writeUserData(501)}
+          onPress={() => this.writeUserData(111101)}
           style={styles.appButtonContainer}
         >
           <Text>Chalo Sahi se</Text>

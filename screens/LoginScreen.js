@@ -5,6 +5,8 @@ import { SafeAreaView, StyleSheet, TextInput, Text, Button, TouchableOpacity, on
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+import { initializeApp } from "firebase/app";
+import { getDatabase, ref, set, onValue } from "firebase/database";
 
 
 
@@ -22,6 +24,31 @@ const Register = () => {
 
   
 
+  const firebaseConfig = {
+    apiKey: "AIzaSyD5URkTEN93VGrNZCe1MtQbVszA1VcBP5I",
+    authDomain: "reactnativevegis-f8fb3.firebaseapp.com",
+    databaseURL: "https://reactnativevegis-f8fb3-default-rtdb.firebaseio.com",
+    projectId: "reactnativevegis-f8fb3",
+    storageBucket: "reactnativevegis-f8fb3.appspot.com",
+    messagingSenderId: "733536075017",
+    appId: "1:733536075017:web:505a1fcf90fab668eea7d8",
+    measurementId: "G-S7FKN1M03Y",
+  };
+  
+  
+  const app = initializeApp(firebaseConfig);
+  const db_f = getDatabase(app);
+  
+  function writeUserData(number, texxt,  address,pincode) {
+    console.log("yaahan3");
+    set(ref(db_f, "RegisterDetails/" + number), {
+     
+      phno: number,
+      name: texxt,
+      address: address,
+      pincode: pincode,
+    });
+  }
 
   return (
     <SafeAreaView>
@@ -29,32 +56,10 @@ const Register = () => {
 
 
 
-<Text style = {styles.text}> Create Account </Text>
+<Text style = {styles.text}> Login </Text>
 
 
 
-<TextInput
-        style={styles.input}
-        onChangeText={onChangePincode}
-        value={pincode}
-        placeholder="Pincode" 
-        
-        keyboardType="numeric"
-      />
-
-      <TextInput
-        style={styles.input}
-        onChangeText={onChangeText}
-        value={text}
-        placeholder="Name" 
-      />
-
-      <TextInput
-        style={styles.input}
-        onChangeText={onChangeAddress}
-        value={address}
-        placeholder="Full Address" 
-      />
 
 
       <TextInput
@@ -67,17 +72,14 @@ const Register = () => {
       />
 
 
-<Button
-  title="Already have an account? Login"
-  onPress={() => navigation.push('Details')}
-/>
+
 
 
 
 <TouchableOpacity onPress={onPress} style={styles.appButtonContainer}>
     
     
-    <Text style={styles.appButtonText}>{"Register "}</Text>
+    <Text style={styles.appButtonText}>{"Login "}</Text>
     </TouchableOpacity>
     </SafeAreaView>
   );
