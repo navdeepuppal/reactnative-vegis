@@ -41,9 +41,11 @@ function Items({ done: doneHeading, onPressItem }) {
     });
   }, []);
 
-  const heading = doneHeading ? "Completed" : "";
+  const heading = doneHeading ? "Completed" : "Todo";
 
-
+  if (items === null || items.length === 0) {
+    return null;
+  }
 
   return (
     <View style={styles.sectionContainer}>
@@ -70,7 +72,13 @@ export default function User() {
   const [text, setText] = useState(null);
   const [forceUpdate, forceUpdateId] = useForceUpdate();
 
- 
+  useEffect(() => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        "create table if not exists items (id integer primary key not null, done int, value text);"
+      );
+    });
+  }, []);
 
   const add = (text) => {
     // is text empty?
@@ -78,12 +86,21 @@ export default function User() {
       return false;
     }
 
-    
+    db.transaction(
+      (tx) => {
+        tx.executeSql("insert into items (done, value) values (0, ?)", [text]);
+        tx.executeSql("select * from items", [], (_, { rows }) =>
+          console.log(JSON.stringify(rows))
+        );
+      },
+      null,
+      forceUpdate
+    );
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.heading}>Profile Page</Text>
+      <Text style={styles.heading}>SQLite Example</Text>
 
       {Platform.OS === "web" ? (
         <View
@@ -95,14 +112,47 @@ export default function User() {
         </View>
       ) : (
         <>
-          
+          <View style={styles.flexRow}>
+            <TextInput
+              onChangeText={(text) => setText(text)}
+              onSubmitEditing={() => {
+                add(text);
+                setText(null);
+              }}
+              placeholder="what do you need to do?"
+              style={styles.input}
+              value={text}
+            />
+          </View>
           <ScrollView style={styles.listArea}>
             <Items
               key={`forceupdate-todo-${forceUpdateId}`}
               done={false}
+              onPressItem={(id) =>
+                db.transaction(
+                  (tx) => {
+                    tx.executeSql(`update items set done = 1 where id = ?;`, [
+                      id,
+                    ]);
+                  },
+                  null,
+                  forceUpdate
+                )
+              }
             />
-
-          
+            <Items
+              done
+              key={`forceupdate-done-${forceUpdateId}`}
+              onPressItem={(id) =>
+                db.transaction(
+                  (tx) => {
+                    tx.executeSql(`delete from items where id = ?;`, [id]);
+                  },
+                  null,
+                  forceUpdate
+                )
+              }
+            />
           </ScrollView>
         </>
       )}
@@ -140,7 +190,8 @@ const styles = StyleSheet.create({
   },
   listArea: {
     backgroundColor: "#f0f0f0",
-    
+    flex: 1,
+    paddingTop: 16,
   },
   sectionContainer: {
     marginBottom: 16,
