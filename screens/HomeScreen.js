@@ -7,7 +7,7 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-  onPress
+  onPress,
 } from "react-native";
 import Constants from "expo-constants";
 import * as SQLite from "expo-sqlite";
@@ -39,9 +39,6 @@ function Items({ done: doneHeading, onPressItem }) {
         [doneHeading ? 1 : 0],
         (_, { rows: { _array } }) => setItems(_array)
       );
-
-     
-
     });
   }, []);
 
@@ -79,28 +76,42 @@ export default function User() {
   useEffect(() => {
     db.transaction((tx) => {
       tx.executeSql(
-        "DELETE FROM cart;"
+        "create table if not exists cart (name text primary key not null, price integer, quantity integer, units text);"
       );
-      tx.executeSql(
-        "create table if not exists cart (id integer primary key not null, done int, value text);"
-      );
-      console.log('Cart table Created');
+      console.log("Cart table Created");
     });
   }, []);
 
-  const add = (text) => {
+  const add = (name, price, units) => {
     // is text empty?
-    if (text === null || text === "") {
+    if (name === null || name === "") {
       return false;
     }
-
+    var ifExists = false;
     db.transaction(
       (tx) => {
-        tx.executeSql("insert into cart (done, value) values (0, ?)", [text]);
-        
-        
-        tx.executeSql("select * from cart", [], (_, { rows }) =>
-          console.log(JSON.stringify(rows))
+        tx.executeSql(
+          "select * from cart where name = ?",
+          [name],
+          (_, { rows }) => {
+            ifExists = JSON.stringify(rows).includes('"name":"' + name + '"');
+            if (ifExists) {
+              console.log("Increased");
+              tx.executeSql(
+                "update cart set quantity = quantity+1 where name = ?",
+                [name]
+              );
+            } else {
+              console.log("Inserted");
+              tx.executeSql(
+                "insert into cart (name, price, quantity, units) values (?, ?, ?, ?)",
+                [name, price, 1, units]
+              );
+            }
+            tx.executeSql("select * from cart", [], (_, { rows }) =>
+              console.log(JSON.stringify(rows))
+            );
+          }
         );
       },
       null,
@@ -108,21 +119,37 @@ export default function User() {
     );
   };
 
-
-
-  const remove = (text) => {
+  const reduce = (name) => {
     // is text empty?
-    if (text === null || text === "") {
+    if (name === null || name === "") {
       return false;
     }
-
+    var quantity = 0;
     db.transaction(
       (tx) => {
-        
-
-        tx.executeSql(`delete from cart where value = ?;`, [text]);
-
-
+        tx.executeSql(
+          "select quantity from cart where name = ?",
+          [name],
+          (_, { rows }) => {
+            var str = JSON.stringify(rows);
+            quantity = parseInt(
+              str.slice(str.indexOf('"quantity":') + 11, str.indexOf("}]"))
+            );
+            if (quantity > 1) {
+              console.log("Decreased");
+              tx.executeSql(
+                "update cart set quantity = quantity-1 where name = ?",
+                [name]
+              );
+            } else {
+              console.log("Deleted");
+              tx.executeSql("delete from cart where name = ?", [name]);
+            }
+            tx.executeSql("select * from cart", [], (_, { rows }) =>
+              console.log(JSON.stringify(rows))
+            );
+          }
+        );
       },
       null,
       forceUpdate
@@ -144,54 +171,30 @@ export default function User() {
       ) : (
         <>
           <View style={styles.flexRow}>
-            
-<TouchableOpacity
-      
-          onPress={() =>  add('Onion 1 kg') && setText(null)}
-          style={styles.roundButton1}
-        >
-          <Text>+</Text>
-        </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => add("Onion", 30, "kg") && setText(null)}
+              style={styles.roundButton1}
+            >
+              <Text>+</Text>
+            </TouchableOpacity>
 
-
-        <TouchableOpacity
-      
-      onPress={() =>  remove('Onion 1 kg') && setText(null)}
-      style={styles.roundButton1}
-    >
-      <Text>-</Text>
-    </TouchableOpacity>
-
+            <TouchableOpacity
+              onPress={() => reduce("Onion") && setText(null)}
+              style={styles.roundButton1}
+            >
+              <Text>-</Text>
+            </TouchableOpacity>
           </View>
           <ScrollView style={styles.listArea}>
             <Items
               key={`forceupdate-todo-${forceUpdateId}`}
               done={false}
-              onPressItem={(id) =>
-                db.transaction(
-                  (tx) => {
-                    tx.executeSql(`update cart set done = 1 where id = ?;`, [
-                      id,
-                    ]);
-                    console.log("Updated");
-                  },
-                  null,
-                  forceUpdate
-                )
-              }
+              onPressItem={() => {}}
             />
             <Items
               done
               key={`forceupdate-done-${forceUpdateId}`}
-              onPressItem={(id) =>
-                db.transaction(
-                  (tx) => {
-                    tx.executeSql(`delete from cart where id = ?;`, [id]);
-                  },
-                  null,
-                  forceUpdate
-                )
-              }
+              onPressItem={() => {}}
             />
           </ScrollView>
         </>

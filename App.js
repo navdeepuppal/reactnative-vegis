@@ -7,18 +7,12 @@ import { createMaterialBottomTabNavigator } from "react-navigation-material-bott
 import HomeScreen from "./screens/HomeScreen";
 import UserScreen from "./screens/UserScreen";
 import SettingScreen from "./screens/SettingScreen";
-
 import FirebaseScreen from "./screens/FirebaseScreen";
-
 import PlaceOrderScreen from "./screens/PlaceOrderScreen";
-
 import RegisterScreen from "./screens/RegisterScreen";
-
 import LoginScreen from "./screens/LoginScreen";
 import ProfileScreen from "./screens/ProfileScreen";
-
 import ProfileSqliteScreen from "./screens/ProfileSqliteScreen";
-
 import InventorySqliteScreen from "./screens/InventorySqliteScreen";
 import MyStack from "./MyStack";
 //import FoodList from "./screens/FoodListScreen";
@@ -26,8 +20,6 @@ import MyStack from "./MyStack";
 import * as SQLite from "expo-sqlite";
 
 import Constants from "expo-constants";
-
-
 
 function openDatabase() {
   if (Platform.OS === "web") {
@@ -46,11 +38,6 @@ function openDatabase() {
 
 const db = openDatabase();
 
-
-
-
-
-
 const TabNavigator = createMaterialBottomTabNavigator(
   {
     Home: {
@@ -66,7 +53,6 @@ const TabNavigator = createMaterialBottomTabNavigator(
         ),
       },
     },
-
 
     PlaceOrder: {
       screen: PlaceOrderScreen,
@@ -122,7 +108,6 @@ const TabNavigator = createMaterialBottomTabNavigator(
       },
     },
 
-
     Login: {
       screen: LoginScreen,
       navigationOptions: {
@@ -165,7 +150,6 @@ const TabNavigator = createMaterialBottomTabNavigator(
       },
     },
 
-
     InventorySqlite: {
       screen: InventorySqliteScreen,
       navigationOptions: {
@@ -180,7 +164,6 @@ const TabNavigator = createMaterialBottomTabNavigator(
       },
     },
 
-
     ProfileSqlite: {
       screen: ProfileSqliteScreen,
       navigationOptions: {
@@ -194,9 +177,6 @@ const TabNavigator = createMaterialBottomTabNavigator(
         ),
       },
     },
-
-
-
   },
   {
     initialRouteName: "Home",
@@ -206,11 +186,6 @@ const TabNavigator = createMaterialBottomTabNavigator(
 
 const Navigator = createAppContainer(TabNavigator);
 
-
-
-
-
-
 export default function User() {
   const [text, setText] = useState(null);
   const [forceUpdate, forceUpdateId] = useForceUpdate();
@@ -219,18 +194,13 @@ export default function User() {
     db.transaction((tx) => {
       tx.executeSql(
         "create table if not exists fruits (name text primary key not null, cutprice integer, price integer, units text, comment text,  image text);"
-        
       );
       tx.executeSql(
         "create table if not exists vegetables (name text primary key not null, cutprice integer, price integer, units text, comment text, image text);"
-        
       );
-      console.log('Both table Created');
+      console.log("Both table Created");
     });
   }, []);
-
- 
-
 
   return (
     <Navigator>
@@ -246,6 +216,3 @@ function useForceUpdate() {
   const [value, setValue] = useState(0);
   return [() => setValue(value + 1), value];
 }
-
-
-
