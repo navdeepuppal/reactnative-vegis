@@ -2,13 +2,8 @@ import React from "react";
 import {
   Text,
   View,
-  Button,
-  onPress,
-  navigation,
   StyleSheet,
   TouchableOpacity,
-  buttonClickedHandler,
-  title,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
