@@ -14,6 +14,12 @@ import LoginScreen from "./screens/LoginScreen";
 import ProfileScreen from "./screens/ProfileScreen";
 import ProfileSqliteScreen from "./screens/ProfileSqliteScreen";
 import InventorySqliteScreen from "./screens/InventorySqliteScreen";
+
+import OnboardingScreen from "./screens/OnboardingScreen";
+
+import HomeUIScreen from "./screens/HomeUIScreen";
+import CartScreen from "./screens/CartUIScreen";
+
 import MyStack from "./MyStack";
 //import FoodList from "./screens/FoodListScreen";
 
@@ -44,6 +50,20 @@ const TabNavigator = createMaterialBottomTabNavigator(
       screen: HomeScreen,
       navigationOptions: {
         tabBarLabel: "Home",
+        tabBarIcon: (tabInfo) => (
+          <Ionicons
+            name="md-home"
+            size={tabInfo.focused ? 26 : 20}
+            color={tabInfo.tintColor}
+          />
+        ),
+      },
+    },
+
+    HomeUIScreen: {
+      screen: HomeUIScreen,
+      navigationOptions: {
+        tabBarLabel: "HomeUIScreen",
         tabBarIcon: (tabInfo) => (
           <Ionicons
             name="md-home"
@@ -177,6 +197,38 @@ const TabNavigator = createMaterialBottomTabNavigator(
         ),
       },
     },
+
+
+    Onboarding: {
+      screen: OnboardingScreen,
+      navigationOptions: {
+        tabBarLabel: "OnboardingScreen",
+        tabBarIcon: (tabInfo) => (
+          <Ionicons
+            name="md-logo-firebase"
+            size={tabInfo.focused ? 26 : 20}
+            color={tabInfo.tintColor}
+          />
+        ),
+      },
+    },
+
+    Cart: {
+      screen: CartScreen,
+      navigationOptions: {
+        tabBarLabel: "CartUIScreen",
+        tabBarIcon: (tabInfo) => (
+          <Ionicons
+            name="md-logo-firebase"
+            size={tabInfo.focused ? 26 : 20}
+            color={tabInfo.tintColor}
+          />
+        ),
+      },
+    },
+
+ 
+
   },
   {
     initialRouteName: "Home",
